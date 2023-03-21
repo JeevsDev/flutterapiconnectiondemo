@@ -1,16 +1,17 @@
-# flutterapiconnectiontutorial
+# Flutter API Connection Demo
 
-A new Flutter project.
+A small flutter app created to demonstrate API connectivity in Flutter. Includes GET &amp; POST method to fetch data from the server as well as submit data back to the server.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Clone the repository and you're good to go!
 
-A few resources to get you started if this is your first Flutter project:
+Tools I Used:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- VS Code
+- Android Studio
+- Android Emulator
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Questions? Mail me @ jeevandevasiajohn@gmail.com
+
+Thank You 🖤
