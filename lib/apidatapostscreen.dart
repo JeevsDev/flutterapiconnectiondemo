@@ -1,12 +1,17 @@
+import 'dart:async';
 import 'dart:convert';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'dart:core';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutterapiconnectiontutorial/CheckConnectivity.dart';
 import 'package:flutterapiconnectiontutorial/Models/postapimodel.dart';
 import 'package:flutterapiconnectiontutorial/components/my_dropdown.dart';
 import 'package:flutterapiconnectiontutorial/posteddatafetchscreen.dart';
 import 'package:http/http.dart' as http;
+import 'package:panara_dialogs/panara_dialogs.dart';
+import 'Home_Screen.dart';
 
 import 'components/my_button.dart';
 import 'components/my_textfield.dart';
@@ -17,6 +22,7 @@ class PostData extends StatefulWidget {
   @override
   State<PostData> createState() => _PostDataState();
 }
+
 
 Future<PostModel?> submitData(String name, String job) async{
   var response = await http.post(Uri.https("reqres.in", 'api/users'), body: {'name' : name, 'job' : job});
@@ -37,6 +43,54 @@ Future<PostModel?> submitData(String name, String job) async{
   } 
 
 class _PostDataState extends State<PostData> {
+
+  late ConnectivityResult result;
+  late StreamSubscription subscription;
+  var isConnected = false;
+
+  @override
+  void initState() {
+    super.initState();
+    startStreaming();
+  }
+
+
+  checkInternet() async {
+    result = await Connectivity().checkConnectivity();
+    if(result!=ConnectivityResult.none) {
+      isConnected = true;
+    } else{
+      isConnected = false;
+      showDialogBox();
+    }
+    setState(() {});
+  }
+
+
+    showDialogBox() {
+      PanaraInfoDialog.showAnimatedGrow(
+        context,
+        imagePath: 'assets/images/no_wifi.png',
+        title: "Oops!",
+        message: "No Internet Connection!",
+        buttonText: "Retry",
+        onTapDismiss: () {
+            Navigator.pop(context);
+            checkInternet();
+        },
+        panaraDialogType: PanaraDialogType.custom,
+        color: Colors.black,
+
+        barrierDismissible: false, // optional parameter (default is true)
+);
+    }
+
+    startStreaming() {
+      subscription = Connectivity().onConnectivityChanged.listen((event) async {
+        checkInternet();
+      });
+    }  
+
 
 
   PostModel? _postModel;

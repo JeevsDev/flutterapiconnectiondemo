@@ -1,9 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapiconnectiontutorial/Models/getapimodel.dart';
 import 'package:http/http.dart' as http;
+import 'package:panara_dialogs/panara_dialogs.dart';
 
 class FetchData extends StatefulWidget {
   const FetchData({super.key});
@@ -13,7 +14,57 @@ class FetchData extends StatefulWidget {
 }
 
 class _FetchDataState extends State<FetchData> {
-bool is_loading = true;
+
+  late ConnectivityResult result;
+  late StreamSubscription subscription;
+  var isConnected = false;
+
+  @override
+  void initState() {
+    super.initState();
+    startStreaming();
+  }
+
+
+  checkInternet() async {
+    result = await Connectivity().checkConnectivity();
+    if(result!=ConnectivityResult.none) {
+      isConnected = true;
+    } else{
+      isConnected = false;
+      showDialogBox();
+    }
+    setState(() {});
+  }
+
+
+    showDialogBox() {
+      PanaraInfoDialog.showAnimatedGrow(
+        context,
+        imagePath: 'assets/images/no_wifi.png',
+        title: "Oops!",
+        message: "No Internet Connection!",
+        buttonText: "Retry",
+        onTapDismiss: () {
+            Navigator.pop(context);
+            checkInternet();
+        },
+        panaraDialogType: PanaraDialogType.custom,
+        color: Colors.black,
+
+        barrierDismissible: false, // optional parameter (default is true)
+);
+    }
+
+    startStreaming() {
+      subscription = Connectivity().onConnectivityChanged.listen((event) async {
+        checkInternet();
+      });
+    }  
+
+
+
+  bool is_loading = true;
 
   List<GetModel> fetchList = [];
   Future<List<GetModel>> loadData() async{

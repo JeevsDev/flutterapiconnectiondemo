@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutterapiconnectiontutorial/apidatafetchscreen.dart';
-import 'package:flutterapiconnectiontutorial/apidatapostscreen.dart';
-import 'package:flutterapiconnectiontutorial/posteddatafetchscreen.dart';
 import 'Home_Screen.dart';
 
 void main() {
